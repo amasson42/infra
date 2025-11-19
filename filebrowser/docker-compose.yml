@@ -1,0 +1,19 @@
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    user: ${UID}:${GID}
+    volumes:
+      - ./files:/srv
+      - ./config:/config
+      - ./database:/database
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "${PORT:-443}:443"
+    command:
+      - --cert
+      - /etc/letsencrypt/live/${DOMAIN_NAME}/cert.pem
+      - --key
+      - /etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem
+    restart: unless-stopped
